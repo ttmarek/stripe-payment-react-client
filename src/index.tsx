@@ -1,12 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import axios from "axios";
+import ReactDOM from "react-dom";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import App from "./App";
+import { StripeContext } from "./components";
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// const webSocket = new WebSocket(process.env.REACT_APP_SERVER_SOCKET_URL || "");
+
+// webSocket.onopen = () => {
+//   webSocket.send("hello from js");
+// };
+
+// webSocket.onerror = error => {
+//   console.log(error);
+// };
+
+// webSocket.onmessage = e => {
+//   try {
+//     const data = JSON.parse(e.data);
+//     console.group(`WebHook: ${data.type}`);
+//     console.log(data);
+//     console.groupEnd();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_BASE_URL;
+
+const stripe = (window as any).Stripe(process.env.REACT_APP_STRIPE_KEY);
+
+ReactDOM.render(
+  <StripeContext.Provider value={stripe}>
+    <App />
+  </StripeContext.Provider>,
+  document.getElementById("root")
+);
